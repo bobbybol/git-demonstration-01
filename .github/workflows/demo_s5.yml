@@ -25,7 +25,9 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+      #
       # Artifact
+      #
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -35,5 +37,11 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+      - name: Output contents
+        run: ls
       - name: Deploy
         run: echo "Deploying..."
