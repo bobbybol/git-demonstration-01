@@ -18,6 +18,11 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    #
+    # Output 1
+    #
+    outputs:
+      script-file: ${{ steps.publish.outputs.latidah }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -26,7 +31,13 @@ jobs:
       - name: Build website
         run: npm run build
       #
-      # Artifact
+      # Output 2
+      #
+      - name: Publish JS file name
+        id: publish
+        run: find dist/assets/*.js -type f -execdir echo 'latidah={}' >> $GITHUB_OUTPUT ';'
+      #
+      # Artifact up
       #
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -37,11 +48,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      #
+      # Artifact down
+      #
       - name: Get build artifacts
         uses: actions/download-artifact@v4
         with:
           name: dist-files
       - name: Output contents
         run: ls
+      - name: Output file name
+        run: echo "${{ needs.build.outputs.script-file }}"
       - name: Deploy
         run: echo "Deploying..."
