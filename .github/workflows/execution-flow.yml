@@ -32,9 +32,13 @@ jobs:
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
+      # Test
       - name: Test code
+        id: test-code
         run: npm run test
-      - name: Upload test report
+      # Store failing tests
+      - name: Upload report for failing tests
+        if: failure() && steps.test-code.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: test-report
@@ -73,3 +77,11 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
+  report:
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: | 
+          echo "Something went wrong"
+          echo "${{ github }}"
