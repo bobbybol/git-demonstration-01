@@ -15,7 +15,7 @@ jobs:
         with:
           caching: false
       - name: Output information
-        run: echo "Cach used? ${{ steps.cache-deps.outputs.used-cache }}"
+        run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
       - name: Lint code
         run: npm run lint
   test:
@@ -64,3 +64,8 @@ jobs:
         run: ls
       - name: Deploy site
         run: echo "Deploying..."
+  information:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run custom action
+        uses: ./.github/actions/deploy-s3-js
