@@ -69,4 +69,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
           bucket: bob-gha-custom-action
-          dist: ./dist
+          dist-folder: ./dist
